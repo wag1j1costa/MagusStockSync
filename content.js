@@ -2,7 +2,7 @@
 const rows = document.querySelectorAll('.table-allTCG-order-0 tbody tr');
 const urlParams = new URLSearchParams(window.location.search);
 const currentPage = urlParams.get('page');
-const sellerIdParam = urlParams.get('seller_id');
+const emailParam = urlParams.get('email');
 const apiKeyParam = urlParams.get('key');
 const createOptionParam = urlParams.get('create_option');
 const priceOptionParam = urlParams.get('price_option');
@@ -12,20 +12,20 @@ const filtroOp = 'txt_filtro_operacao';
 const searchType = 'search_type';
 const modoParam = urlParams.get('modo');
 
-let apiKey, sellerId, createOption, priceOption, tcg, modo;
+let apiKey, email, createOption, priceOption, tcg, modo;
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    if (message.apiKey && message.sellerId) {
+    if (message.apiKey && message.email) {
         // Use os valores recebidos como desejar
         apiKey = message.apiKey;
-        sellerId = message.sellerId;
+        email = message.email;
         createOption = message.createOption;
         priceOption = message.priceOption;
         tcg = message.tcg;
         modo = message.modo;
 
-        // Faça algo com apiKey e sellerId
-        console.log('Valores recebidos em content.js:', apiKey, sellerId, createOption, priceOption, tcg, modo);
+        // Faça algo com apiKey e email
+        console.log('Valores recebidos em content.js:', apiKey, email, createOption, priceOption, tcg, modo);
 
         // adicionar variaveis como parametro e recarregar a página
         // Crie um objeto URLSearchParams
@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         params.append('page', 1);
         params.append('tcg', tcg);
         params.append('key', apiKey);
-        params.append('seller_id', sellerId);
+        params.append('email', email);
         params.append('create_option', createOption);
         params.append('price_option', priceOption);
         if(modo && modo == 2) {
@@ -57,10 +57,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
 });
 
-if (apiKeyParam && sellerIdParam) {
+if (apiKeyParam && emailParam) {
     // Use os parametros para preencher as variáveis
     apiKey = apiKeyParam;
-    sellerId = sellerIdParam;
+    email = emailParam;
     createOption = createOptionParam;
     priceOption = priceOptionParam;
     modo = modoParam;
@@ -145,7 +145,7 @@ function modoCadastro() {
                         precoLiga = null;
                     }
     
-                    if (!apiKey || !sellerId) {
+                    if (!apiKey || !email) {
                         // alert('Por favor, configure a extensão com a sua chave de API e ID de vendedor.');
                         Swal.fire({
                             icon: "question",
@@ -172,7 +172,7 @@ function modoCadastro() {
                     // Faz a requisição AJAX
                     let promise = (async () => {
                         try {
-                            let response = await fetch(`https://magusmarket.com.br/catalog/collection/sellerstock/?sku=${code}&seller_id=${sellerId}&key=${apiKey}`);
+                            let response = await fetch(`https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/collection/sellerstock/?sku=${code}&email=${email}&key=${apiKey}`);
                             let data = await response.json();
                 
                             const newStock = estoqueLiga;
@@ -188,7 +188,7 @@ function modoCadastro() {
                                 errorArray.push(`${nomeProdutoLiga}`);
                                 return;
                             }
-                            const stockUrl = `https://magusmarket.com.br/catalog/save/sellerproduct/?sku=${skuForUpdate}&seller_id=${sellerId}&key=${apiKey}&stock=${newStock}${newPrice}`;
+                            const stockUrl = `https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/save/sellerproduct/?sku=${skuForUpdate}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
                 
                             response = await fetch(stockUrl);
                             data = await response.json();
@@ -278,7 +278,7 @@ function modoCadastro() {
             const estoqueLigaElement = row.querySelector('td:nth-child(1) input[type="text"]');
             const estoqueLiga = estoqueLigaElement ? estoqueLigaElement.value : 0;
     
-            if (!apiKey || !sellerId) {
+            if (!apiKey || !email) {
                 // alert('Por favor, configure a extensão com a sua chave de API e ID de vendedor.');
                 Swal.fire({
                     icon: "question",
@@ -301,7 +301,7 @@ function modoCadastro() {
             }
     
             // Faz a requisição AJAX
-            fetch(`https://magusmarket.com.br/catalog/collection/sellerstock/?sku=${code}&seller_id=${sellerId}&key=${apiKey}`)
+            fetch(`https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/collection/sellerstock/?sku=${code}&email=${email}&key=${apiKey}`)
                 .then(response => response.json())
                 .then(data => {
                     // Manipula os dados recebidos
@@ -367,7 +367,7 @@ function modoCadastro() {
                                 }
     
                                 const stockUrl = `
-                                https://magusmarket.com.br/catalog/save/sellerproduct/?sku=${skuProduto}&seller_id=${sellerId}&key=${apiKey}&stock=${newStock}&price=${newPrice}
+                                https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/save/sellerproduct/?sku=${skuProduto}&email=${email}&key=${apiKey}&stock=${newStock}&price=${newPrice}
                                 `;
                                 const response = await fetch(stockUrl);
                                 if (!response.ok) {
@@ -477,7 +477,7 @@ async function modoSincronizar() {
             estoqueLiga = 0;
         }
 
-        if (!apiKey || !sellerId) {
+        if (!apiKey || !email) {
             // alert('Por favor, configure a extensão com a sua chave de API e ID de vendedor.');
             Swal.fire({
                 icon: "question",
@@ -504,7 +504,7 @@ async function modoSincronizar() {
         // Faz a requisição AJAX
         
         try {
-            let response = await fetch(`https://magusmarket.com.br/catalog/collection/sellerstock/?sku=${code}&seller_id=${sellerId}&key=${apiKey}`);
+            let response = await fetch(`https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/collection/sellerstock/?sku=${code}&email=${email}&key=${apiKey}`);
             let data = await response.json();
 
             const newStock = estoqueLiga;
@@ -518,7 +518,7 @@ async function modoSincronizar() {
             let skuForUpdate = data[0] ? data[0].sku : null;
             if (skuForUpdate === null) {
                 if (createOptionParam === 'true') {
-                    let createUrl = `https://magusmarket.com.br/catalog/save/createsellerproduct/?sku=${code}&seller_id=${sellerId}&key=${apiKey}&stock=${newStock}${newPrice}`;
+                    let createUrl = `https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/save/createsellerproduct/?sku=${code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
                     response = await fetch(createUrl);
                     data = await response.json();
                     successArray.push(`${nomeProdutoLiga}`);
@@ -536,7 +536,7 @@ async function modoSincronizar() {
                 continue;
             }
 
-            const stockUrl = `https://magusmarket.com.br/catalog/save/sellerproduct/?sku=${skuForUpdate}&seller_id=${sellerId}&key=${apiKey}&stock=${newStock}${newPrice}`;
+            const stockUrl = `https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/save/sellerproduct/?sku=${skuForUpdate}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
 
             response = await fetch(stockUrl);
             data = await response.json();
@@ -633,7 +633,7 @@ async function modoFaltantes() {
         // Faz a requisição AJAX
         
         try {
-            let response = await fetch(`https://magusmarket.com.br/catalog/collection/sellerstock/?limite=1&seller_id=${sellerId}&key=${apiKey}&card_id=${cardId}&edition_id=${cardEditionId}&idiom=${idiomaLiga}&quality=${qualidadeLiga}&extras=${extrasLiga}`);
+            let response = await fetch(`https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/collection/sellerstock/?limite=1&email=${email}&key=${apiKey}&card_id=${cardId}&edition_id=${cardEditionId}&idiom=${idiomaLiga}&quality=${qualidadeLiga}&extras=${extrasLiga}`);
             let data = await response.json();
             console.log(data);
 
@@ -653,7 +653,7 @@ async function modoFaltantes() {
             }
             if (skuForUpdate === null) {
                 if (createOptionParam === 'true') {
-                    let createUrl = `https://magusmarket.com.br/catalog/save/createsellerproduct/?sku=${code}&seller_id=${sellerId}&key=${apiKey}&stock=${newStock}${newPrice}`;
+                    let createUrl = `https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/save/createsellerproduct/?sku=${code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
                     response = await fetch(createUrl);
                     data = await response.json();
                     row.style.backgroundColor = 'lightgreen';
@@ -683,7 +683,7 @@ async function modoFaltantes() {
                 continue;
             }
 
-            const stockUrl = `https://magusmarket.com.br/catalog/save/sellerproduct/?sku=${skuForUpdate}&seller_id=${sellerId}&key=${apiKey}&stock=${newStock}${newPrice}`;
+            const stockUrl = `https://zrx9va6fx7cgfnmi7p33gsog.testsrv.mageuni.cloud/catalog/save/sellerproduct/?sku=${skuForUpdate}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
 
             response = await fetch(stockUrl);
             data = await response.json();

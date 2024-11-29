@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Carrega os valores salvos, se existirem
     const savedApiKey = localStorage.getItem('api_key');
-    const savedSellerId = localStorage.getItem('seller_id');
+    const savedemail = localStorage.getItem('seller_id');
     const createOption = localStorage.getItem('create_option');
     const priceOption = localStorage.getItem('price_option');
     const tcg = localStorage.getItem('tcg');
@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedApiKey) {
         document.getElementById('api-key-input').value = savedApiKey;
     }
-    if (savedSellerId) {
-        document.getElementById('seller-id-input').value = savedSellerId;
+    if (savedemail) {
+        document.getElementById('seller-id-input').value = savedemail;
     }
     if (createOption === 'true') {
         document.getElementById('create-product').checked = true;
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //     chrome.tabs.sendMessage(tabs[0].id, 
     //         {
     //             apiKey: savedApiKey, 
-    //             sellerId: savedSellerId,
+    //             email: savedemail,
     //             createOption: createOption,
     //             priceOption: priceOption
     //         }, function(response) {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     saveButton.addEventListener('click', function() {
         // Obtém os valores dos inputs
         const apiKey = document.getElementById('api-key-input').value;
-        const sellerId = document.getElementById('seller-id-input').value;
+        const email = document.getElementById('seller-id-input').value;
         const tcg = document.getElementById('tcg-select').value;
         const createOption = document.getElementById('create-product').checked;
         const priceOption = document.getElementById('update-price').checked;
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chrome.tabs.sendMessage(tabs[0].id, 
                 {
                     apiKey: apiKey, 
-                    sellerId: sellerId,
+                    email: email,
                     createOption: createOption,
                     priceOption: priceOption,
                     tcg: tcg,
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Salva os valores no armazenamento local
         localStorage.setItem('api_key', apiKey);
-        localStorage.setItem('seller_id', sellerId);
+        localStorage.setItem('email', email);
         localStorage.setItem('create_option', createOption);
         localStorage.setItem('price_option', priceOption);
         localStorage.setItem('tcg', tcg);
