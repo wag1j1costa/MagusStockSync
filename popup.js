@@ -96,7 +96,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validação de campos
         if (!apiKey || !email) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             showMessage('❌ Erro: API Key e E-mail são obrigatórios!', 'error');
+=======
+            showMessage('Erro', 'API Key e E-mail são obrigatórios!', 'error');
+>>>>>>> Stashed changes
 =======
             showMessage('Erro', 'API Key e E-mail são obrigatórios!', 'error');
 >>>>>>> Stashed changes
@@ -105,7 +109,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (syncOrders && !password) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             showMessage('❌ Erro: Para sincronização de pedidos, a senha é obrigatória!', 'error');
+=======
+            showMessage('Erro', 'Para sincronização de pedidos, a senha é obrigatória!', 'error');
+>>>>>>> Stashed changes
 =======
             showMessage('Erro', 'Para sincronização de pedidos, a senha é obrigatória!', 'error');
 >>>>>>> Stashed changes
@@ -125,10 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('magus_sync_interval', syncInterval);
         
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // Salvar também com as chaves alternativas
         localStorage.setItem('magus_email', email);
         localStorage.setItem('magus_api_key', apiKey);
         
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         // Limpar qualquer sincronização agendada anterior
@@ -141,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.removeItem('magus_next_sync');
         }
         
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         // Tentar enviar mensagem para o content.js
         if (chrome && chrome.tabs) {
@@ -335,6 +347,28 @@ document.addEventListener('DOMContentLoaded', function() {
         showMessage('Sucesso', 'Configurações salvas com sucesso!', 'success');
     });
     
+=======
+        // Envia uma mensagem para o content.js com os valores salvos
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                apiKey: apiKey,
+                email: email,
+                password: password,
+                createOption: createOption,
+                priceOption: priceOption,
+                tcg: tcg,
+                modo: modo,
+                syncOrders: syncOrders ? 'true' : 'false'
+            }, function(response) {
+                // Callback opcional
+            });
+        });
+        
+        // Mostra mensagem de confirmação
+        showMessage('Sucesso', 'Configurações salvas com sucesso!', 'success');
+    });
+    
+>>>>>>> Stashed changes
     function showMessage(title, message, type) {
         const messageElement = document.getElementById('message');
         messageElement.textContent = message;
@@ -346,5 +380,8 @@ document.addEventListener('DOMContentLoaded', function() {
             messageElement.style.display = 'none';
         }, 3000);
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 });
