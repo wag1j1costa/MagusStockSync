@@ -1,9 +1,9 @@
 {
     "manifest_version": 3,
     "name": "Magus Market estoque",
-    "version": "1.0",
-    "description": "Extensão para gerenciar estoque de produtos e preços da Magus Market",
-    "permissions": ["activeTab", "storage", "scripting"],
+    "version": "2.0",
+    "description": "Faça todo o controle e sincronização do seu estoque aqui.",
+    "permissions": ["activeTab"],
     "background": {
       "service_worker": "background.js"
     },
@@ -18,7 +18,7 @@
       {
         "matches": ["<all_urls>"],
         "js": ["libs/sweetalert2.all.min.js", "content.js"],
-        "run_at": "document_idle"
+        "run_at": "document_end"
       }
     ]
   }

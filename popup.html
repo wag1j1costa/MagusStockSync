@@ -1,80 +1,230 @@
-<html lang="pt-br">
+<!DOCTYPE html>
+<html>
 <head>
+    <title>Magus Market Extension</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            width: 300px;
-            height: auto;
-            padding: 16px;
-            background: #6A6A66;
+            width: 320px;
+            font-family: Arial, sans-serif;
+            padding: 10px;
         }
-
         h1 {
-            margin-bottom: 16px;
-            color: #FFE0B8;
+            font-size: 18px;
+            text-align: center;
+            margin-top: 0;
+            color: #3c3c3c;
         }
-
-        label, input {
-            display: block;
-            color: #FFE0B8;
+        .form-group {
+            margin-bottom: 12px;
         }
-
         label {
-            margin-bottom: 4px;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
         }
-
-        input,
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
         select {
-            margin-bottom: 8px;
             width: 100%;
-            background: rgba(36, 31, 48, 0.40);
-            color: #FFE0B8;
-            border: none;
-            height: 24px;
-
-            option {
-                background: #241F30;
-            }
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .checkbox-group label {
+            margin-bottom: 0;
+            margin-left: 8px;
+            font-weight: normal;
+        }
         button {
             width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .switch-group {
             display: flex;
-            height: 32px;
-            padding: 0px 24px;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            border-radius: 20px;
-            border: 1px solid  #241F30;
-            background: rgba(255, 188, 100, 0.80);
-            margin-top: 32px;
+            margin-bottom: 12px;
+        }
+        .switch-group label {
+            margin-bottom: 0;
+        }
+        .message {
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .message-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .divider {
+            margin: 15px 0;
+            border-top: 1px solid #eee;
+        }
+        .section-title {
             font-size: 16px;
+            font-weight: bold;
+            margin: 12px 0 8px;
+            color: #444;
+        }
+        .info-text {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        /* Estilo para indent dos campos relacionados */
+        .indent-container {
+            margin-left: 15px;
+            border-left: 2px solid #eee;
+            padding-left: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Magus Market estoque</h1>
-    <label for="tcg-select">TCG:</label>
-    <select id="tcg-select">
-        <option value="1">Magic The Gathering</option>
-    </select>
-    <label for="mode-select">Modo</label>
-    <select id="mode-select">
-        <option value="1">Cadastro</option>
-        <option value="2">Sincronização</option>
-        <option value="3">Sincronização via limites de estoque</option>
-    </select>
-    <label for="seller-id-input">E-mail de vendedor na Magus Shop</label>
-    <input type="text" id="seller-id-input">
-    <label for="api-key-input">Senha na Magus Shop</label>
-    <input type="password" id="api-key-input">
-    <label for="create-product">Criar produto não encontrado</label>
-    <input type="checkbox" id="create-product" style="width: 32px;">
-    <label for="update-price">Sincronizar preços</label>
-    <input type="checkbox" id="update-price" style="width: 32px;">
+    <h1>Magus Market Estoque</h1>
+    
+    <div id="message" class="message"></div>
+
+    <div class="section-title">Configurações Básicas</div>
+    
+    <div class="form-group">
+        <label for="tcg-select">TCG:</label>
+        <select id="tcg-select">
+            <option value="1">Magic The Gathering</option>
+            <option value="2">Pokémon</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="mode-select">Modo:</label>
+        <select id="mode-select">
+            <option value="1">Cadastro</option>
+            <option value="2">Sincronização</option>
+            <option value="3">Sincronização via limites de estoque</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="seller-id-input">E-mail de vendedor na Magus Shop:</label>
+        <input type="text" id="seller-id-input" placeholder="seu@email.com">
+    </div>
+    
+    <div class="form-group">
+        <label for="api-key-input">Chave de API na Magus Shop:</label>
+        <input type="text" id="api-key-input" placeholder="Sua chave de API">
+    </div>
+    
+    <div class="checkbox-group">
+        <input type="checkbox" id="create-product">
+        <label for="create-product">Criar produto não encontrado</label>
+    </div>
+    
+    <div class="checkbox-group">
+        <input type="checkbox" id="update-price">
+        <label for="update-price">Sincronizar preços</label>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="section-title">Sincronização de Pedidos</div>
+    
+    <div class="switch-group">
+        <label for="sync-orders">Sincronizar pedidos:</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="sync-orders">
+            <span class="slider"></span>
+        </label>
+    </div>
+    
+    <div id="password-container" class="form-group" style="display: none;">
+        <label for="password-input">Senha na Loja:</label>
+        <input type="password" id="password-input" placeholder="Sua senha na loja">
+    </div>
+    
+    <div id="auto-sync-container" class="switch-group" style="display: none;">
+        <label for="auto-sync">Sincronização automática:</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="auto-sync">
+            <span class="slider"></span>
+        </label>
+    </div>
+    
+    <div id="sync-interval-container" class="form-group indent-container" style="display: none;">
+        <label for="sync-interval">Intervalo (horas):</label>
+        <input type="number" id="sync-interval" min="1" max="24" value="1">
+        <div class="info-text">Um indicador de status aparecerá no canto superior direito da página da loja mostrando o progresso da sincronização.</div>
+    </div>
+    
+    <div class="divider"></div>
+    
     <button id="save-button">Ativar Extensão</button>
+    
     <script src="popup.js"></script>
 </body>
 </html>
