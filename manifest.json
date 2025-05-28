@@ -1,7 +1,11 @@
 {
     "manifest_version": 3,
     "name": "Magus Market estoque",
+<<<<<<< Updated upstream
     "version": "2.0",
+=======
+    "version": "1.7",
+>>>>>>> Stashed changes
     "description": "Faça todo o controle e sincronização do seu estoque aqui.",
     "permissions": ["activeTab"],
     "background": {

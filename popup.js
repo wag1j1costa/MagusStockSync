@@ -95,12 +95,20 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Validação de campos
         if (!apiKey || !email) {
+<<<<<<< Updated upstream
             showMessage('❌ Erro: API Key e E-mail são obrigatórios!', 'error');
+=======
+            showMessage('Erro', 'API Key e E-mail são obrigatórios!', 'error');
+>>>>>>> Stashed changes
             return;
         }
         
         if (syncOrders && !password) {
+<<<<<<< Updated upstream
             showMessage('❌ Erro: Para sincronização de pedidos, a senha é obrigatória!', 'error');
+=======
+            showMessage('Erro', 'Para sincronização de pedidos, a senha é obrigatória!', 'error');
+>>>>>>> Stashed changes
             return;
         }
         
@@ -116,10 +124,13 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('magus_auto_sync', autoSync ? 'true' : 'false');
         localStorage.setItem('magus_sync_interval', syncInterval);
         
+<<<<<<< Updated upstream
         // Salvar também com as chaves alternativas
         localStorage.setItem('magus_email', email);
         localStorage.setItem('magus_api_key', apiKey);
         
+=======
+>>>>>>> Stashed changes
         // Limpar qualquer sincronização agendada anterior
         if (syncOrders && autoSync) {
             // Definir a próxima sincronização de acordo com o intervalo
@@ -130,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.removeItem('magus_next_sync');
         }
         
+<<<<<<< Updated upstream
         // Tentar enviar mensagem para o content.js
         if (chrome && chrome.tabs) {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -302,4 +314,37 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('magus_api_key', this.value);
         localStorage.setItem('api_key', this.value);
     });
+=======
+        // Envia uma mensagem para o content.js com os valores salvos
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                apiKey: apiKey,
+                email: email,
+                password: password,
+                createOption: createOption,
+                priceOption: priceOption,
+                tcg: tcg,
+                modo: modo,
+                syncOrders: syncOrders ? 'true' : 'false'
+            }, function(response) {
+                // Callback opcional
+            });
+        });
+        
+        // Mostra mensagem de confirmação
+        showMessage('Sucesso', 'Configurações salvas com sucesso!', 'success');
+    });
+    
+    function showMessage(title, message, type) {
+        const messageElement = document.getElementById('message');
+        messageElement.textContent = message;
+        messageElement.className = `message message-${type}`;
+        messageElement.style.display = 'block';
+        
+        // Oculta a mensagem após 3 segundos
+        setTimeout(() => {
+            messageElement.style.display = 'none';
+        }, 3000);
+    }
+>>>>>>> Stashed changes
 });

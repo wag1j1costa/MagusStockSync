@@ -14,9 +14,12 @@ const searchType = 'search_type';
 const modoParam = urlParams.get('modo');
 const syncOrdersParam = urlParams.get('sync_orders');
 
+<<<<<<< Updated upstream
 // URL base para requisições
 const API_BASE = 'https://magusshop.com.br/';
 
+=======
+>>>>>>> Stashed changes
 let apiKey, email, password, createOption, priceOption, tcg, modo, syncOrders;
 
 // Verificar se estamos na página de login e precisamos fazer login automático
@@ -89,7 +92,11 @@ async function getSellerConfig() {
         }
         
         console.log(`Obtendo configurações do vendedor: ${emailStorage}`);
+<<<<<<< Updated upstream
         const response = await fetch(`${API_BASE}hub/seller/config?email=${emailStorage}&key=${apiKeyStorage}`);
+=======
+        const response = await fetch(`https://magusshop.com.br/hub/seller/config?email=${emailStorage}&key=${apiKeyStorage}`);
+>>>>>>> Stashed changes
         const data = await response.json();
         console.log('Resposta da configuração:', data);
         
@@ -141,9 +148,55 @@ function extractOrderDetails(orderWindow) {
         });
         
         // Dados de preço
+<<<<<<< Updated upstream
         const priceElements = doc.querySelectorAll('.td-sum-small b');
         const valorItens = priceElements[0] ? parseFloat(priceElements[0].textContent.replace('R$ ', '').replace(',', '.')) : 0;
         const valorFrete = priceElements[priceElements.length - 1] ? parseFloat(priceElements[priceElements.length - 1].textContent.replace('R$ ', '').replace(',', '.')) : 0;
+=======
+        // Specifically target the summary table
+        const summaryTable = doc.querySelector('.table-summary');
+        
+        if (!summaryTable) {
+            console.error('Summary table not found');
+            let valorItens = 0;
+            let valorFrete = 0;
+            let creditoUtilizado = 0;
+            let valorTotal = 0;
+        }
+        
+        // Get all rows within this specific table
+        const rows = summaryTable.querySelectorAll('tr');
+        let valorItens = 0;
+        let valorFrete = 0;
+        let creditoUtilizado = 0;
+        let valorTotal = 0;
+
+        // Iterate through each row to find specific labels
+        rows.forEach(row => {
+            const label = row.querySelector('td:first-child');
+            
+            if (!label) return;
+            
+            const labelText = label.textContent.trim();
+            const valueElement = row.querySelector('td:last-child b');
+            
+            if (!valueElement) return;
+            
+            // Convert price text to number
+            const value = parseFloat(valueElement.textContent.replace('R$ ', '').replace(',', '.'));
+            
+            // Assign values based on label text
+            if (labelText.includes('Valor dos Itens:')) {
+            valorItens = value;
+            } else if (labelText.includes('Frete:')) {
+            valorFrete = value;
+            } else if (labelText.includes('Crédito utilizado:')) {
+            creditoUtilizado = value;
+            } else if (labelText.includes('Valor Total:')) {
+            valorTotal = value;
+            }
+        });
+>>>>>>> Stashed changes
         
         // Processamento de endereço
         const addressElement = doc.querySelector('.user-address');
@@ -454,9 +507,55 @@ async function getOrderDetails(orderNumber) {
         });
         
         // Dados de preço
+<<<<<<< Updated upstream
         const priceElements = document.querySelectorAll('.td-sum-small b');
         const valorItens = priceElements[0] ? parseFloat(priceElements[0].textContent.replace('R$ ', '').replace(',', '.')) : 0;
         const valorFrete = priceElements[1] ? parseFloat(priceElements[1].textContent.replace('R$ ', '').replace(',', '.')) : 0;
+=======
+        // Specifically target the summary table
+        const summaryTable = doc.querySelector('.table-summary');
+        
+        if (!summaryTable) {
+            console.error('Summary table not found');
+            let valorItens = 0;
+            let valorFrete = 0;
+            let creditoUtilizado = 0;
+            let valorTotal = 0;
+        }
+        
+        // Get all rows within this specific table
+        const rows = summaryTable.querySelectorAll('tr');
+        let valorItens = 0;
+        let valorFrete = 0;
+        let creditoUtilizado = 0;
+        let valorTotal = 0;
+
+        // Iterate through each row to find specific labels
+        rows.forEach(row => {
+            const label = row.querySelector('td:first-child');
+            
+            if (!label) return;
+            
+            const labelText = label.textContent.trim();
+            const valueElement = row.querySelector('td:last-child b');
+            
+            if (!valueElement) return;
+            
+            // Convert price text to number
+            const value = parseFloat(valueElement.textContent.replace('R$ ', '').replace(',', '.'));
+            
+            // Assign values based on label text
+            if (labelText.includes('Valor dos Itens:')) {
+            valorItens = value;
+            } else if (labelText.includes('Frete:')) {
+            valorFrete = value;
+            } else if (labelText.includes('Crédito utilizado:')) {
+            creditoUtilizado = value;
+            } else if (labelText.includes('Valor Total:')) {
+            valorTotal = value;
+            }
+        });
+>>>>>>> Stashed changes
         
         // Processamento de endereço
         const addressElement = document.querySelector('.user-address');
@@ -614,7 +713,11 @@ async function sendOrderToMagento(orderDetails, sellerId) {
             throw new Error('Credenciais não configuradas');
         }
         
+<<<<<<< Updated upstream
         const response = await fetch(API_BASE + 'hub/orders/import', {
+=======
+        const response = await fetch('https://magusshop.com.br/hub/orders/import', {
+>>>>>>> Stashed changes
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -788,6 +891,7 @@ function modoCadastro(tcgCode) {
     // Adicionar o botão ao lado do submit
     submitButton.insertAdjacentElement('afterend', magusButton);
 
+<<<<<<< Updated upstream
     // Adicionar botão para visualizar preços em cache
     const viewPricesButton = document.createElement('button');
     viewPricesButton.type = 'button';
@@ -802,6 +906,8 @@ function modoCadastro(tcgCode) {
     // Event listener para mostrar preços em cache
     viewPricesButton.addEventListener('click', () => showCachedPrices());
 
+=======
+>>>>>>> Stashed changes
     for (let i = 0; i < rows.length; i++) {
         if (i === 0) {
             const topBodyCell = document.createElement('td');
@@ -846,8 +952,13 @@ function modoCadastro(tcgCode) {
                     const verificationResults = await Promise.all(batch.map(async (productData) => {
                         try {
                             const sellerstockUrl = tcgCode === '2'
+<<<<<<< Updated upstream
                                 ? `${API_BASE}catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}&card_id=${productData.cardId}&edition_id=${productData.editionId}&card_number=${productData.cardNumber}&tcg=2`
                                 : `${API_BASE}catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}`;
+=======
+                                ? `https://magusshop.com.br/catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}&card_id=${productData.cardId}&edition_id=${productData.editionId}&card_number=${productData.cardNumber}&tcg=2`
+                                : `https://magusshop.com.br/catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}`;
+>>>>>>> Stashed changes
                             
                             const response = await fetch(sellerstockUrl);
                             const data = await response.json();
@@ -868,8 +979,13 @@ function modoCadastro(tcgCode) {
                             const newPrice = productData.precoLiga === null ? '' : '&price=' + formatPrice(productData.precoLiga);
             
                             const stockUrl = tcgCode === '2'
+<<<<<<< Updated upstream
                                 ? `${API_BASE}catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}&tcg=2`
                                 : `${API_BASE}catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+=======
+                                ? `https://magusshop.com.br/catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}&tcg=2`
+                                : `https://magusshop.com.br/catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+>>>>>>> Stashed changes
             
                             await fetch(stockUrl);
                             successArray.push(productData.nomeProdutoLiga);
@@ -975,8 +1091,13 @@ function modoCadastro(tcgCode) {
     
             // Faz a requisição AJAX
             let sellerstockUrl = tcgCode === '2'
+<<<<<<< Updated upstream
                 ? `${API_BASE}catalog/collection/sellerstock/?sku=${code}&email=${email}&key=${apiKey}&card_id=${cardIdElement.value}&edition_id=${editionIdElement.value}&card_number=${numberElement.value}&tcg=2`
                 : `${API_BASE}catalog/collection/sellerstock/?sku=${code}&email=${email}&key=${apiKey}`;
+=======
+                ? `https://magusshop.com.br/catalog/collection/sellerstock/?sku=${code}&email=${email}&key=${apiKey}&card_id=${cardIdElement.value}&edition_id=${editionIdElement.value}&card_number=${numberElement.value}&tcg=2`
+                : `https://magusshop.com.br/catalog/collection/sellerstock/?sku=${code}&email=${email}&key=${apiKey}`;
+>>>>>>> Stashed changes
             fetch(sellerstockUrl)
                 .then(response => response.json())
                 .then(data => {
@@ -1044,8 +1165,13 @@ function modoCadastro(tcgCode) {
                                 }
     
                                 const stockUrl =  tcgCode === '2'
+<<<<<<< Updated upstream
                                     ? `${API_BASE}catalog/save/sellerproduct/?id=${idProduto}&sku=${skuProduto}&email=${email}&key=${apiKey}&stock=${newStock}&price=${newPrice}&tcg=2`
                                     : `${API_BASE}catalog/save/sellerproduct/?id=${idProduto}&sku=${skuProduto}&email=${email}&key=${apiKey}&stock=${newStock}&price=${newPrice}`;
+=======
+                                    ? `https://magusshop.com.br/catalog/save/sellerproduct/?id=${idProduto}&sku=${skuProduto}&email=${email}&key=${apiKey}&stock=${newStock}&price=${newPrice}&tcg=2`
+                                    : `https://magusshop.com.br/catalog/save/sellerproduct/?id=${idProduto}&sku=${skuProduto}&email=${email}&key=${apiKey}&stock=${newStock}&price=${newPrice}`;
+>>>>>>> Stashed changes
                                 const response = await fetch(stockUrl);
                                 if (!response.ok) {
                                   return Swal.showValidationMessage(`
@@ -1124,8 +1250,13 @@ async function modoSincronizar(tcgCode) {
         try {
             // Check if product exists in Magus
             const baseUrl = tcgCode === '2' 
+<<<<<<< Updated upstream
                 ? `${API_BASE}catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}&card_id=${productData.cardId}&edition_id=${productData.editionId}&card_number=${productData.cardNumber}&tcg=2`
                 : `${API_BASE}catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}`;
+=======
+                ? `https://magusshop.com.br/catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}&card_id=${productData.cardId}&edition_id=${productData.editionId}&card_number=${productData.cardNumber}&tcg=2`
+                : `https://magusshop.com.br/catalog/collection/sellerstock/?sku=${productData.code}&email=${email}&key=${apiKey}`;
+>>>>>>> Stashed changes
             
             const response = await fetch(baseUrl);
             const data = await response.json();
@@ -1138,8 +1269,13 @@ async function modoSincronizar(tcgCode) {
                 if (createOptionParam === 'true' && newStock > 0) {
                     // Create new product
                     const createUrl = tcgCode === '2'
+<<<<<<< Updated upstream
                         ? `${API_BASE}catalog/save/createsellerproduct/?sku=${productData.code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}&card_id=${productData.cardId}&edition_id=${productData.editionId}&card_number=${productData.cardNumber}&tcg=2`
                         : `${API_BASE}catalog/save/createsellerproduct/?sku=${productData.code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+=======
+                        ? `https://magusshop.com.br/catalog/save/createsellerproduct/?sku=${productData.code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}&card_id=${productData.cardId}&edition_id=${productData.editionId}&card_number=${productData.cardNumber}&tcg=2`
+                        : `https://magusshop.com.br/catalog/save/createsellerproduct/?sku=${productData.code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+>>>>>>> Stashed changes
                     
                     await fetch(createUrl);
                     successArray.push(productData.nomeProdutoLiga);
@@ -1166,8 +1302,13 @@ async function modoSincronizar(tcgCode) {
 
             // Update existing product
             const stockUrl = tcgCode === '2'
+<<<<<<< Updated upstream
                 ? `${API_BASE}catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}&tcg=2`
                 : `${API_BASE}catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+=======
+                ? `https://magusshop.com.br/catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}&tcg=2`
+                : `https://magusshop.com.br/catalog/save/sellerproduct/?id=${existingData.id}&sku=${existingData.sku}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+>>>>>>> Stashed changes
             
             await fetch(stockUrl);
             successArray.push(productData.nomeProdutoLiga);
@@ -1204,6 +1345,93 @@ async function modoSincronizar(tcgCode) {
             nextPage.click();
         }, 2000);
     }
+<<<<<<< Updated upstream
+=======
+}
+
+// Helper function to extract product data from row
+function extractProductData(row) {
+    // Capturar ID da edição e número da carta quando tcg=2
+    const cardIdElement = row.querySelector('td:nth-child(1) input[name^="h_ide_carta"]');
+    const editionIdElement = row.querySelector('td:nth-child(1) input[name^="h_ide_edicao"]');
+    const numberElement = row.querySelector('td:nth-child(1) input[name^="h_numero_carta"]');
+    
+    const cardId = cardIdElement ? cardIdElement.value : null;
+    const editionId = editionIdElement ? editionIdElement.value : null;
+    const cardNumber = numberElement ? numberElement.value : null;
+    
+    const cardNumberElement = row.querySelector('td:nth-child(8) font.card-number-small');
+    const cardNumberText = cardNumberElement ? cardNumberElement.innerHTML : null;
+    const code = cardNumberText ? cardNumberText.replace(/\((.+?)<b>(\S+)<\/b>\)/g, "$1_$2") : null;
+    
+    const nomeProdutoLigaElement = row.querySelector('td:nth-child(8) a:last-of-type');
+    const nomeProdutoLiga = nomeProdutoLigaElement ? nomeProdutoLigaElement.textContent : null;
+    
+    const precoLigaElement = row.querySelector('td:nth-child(3) input[type="text"]');
+    const precoLiga = precoLigaElement ? precoLigaElement.value : null;
+
+    if (precoLiga == null) {
+        return null;
+    }
+
+    const idiomaLigaElement = row.querySelector('td:nth-child(5) select option[selected]');
+    const idiomaLiga = idiomaLigaElement ? idiomaLigaElement.value : null;
+
+    const qualidadeLigaElement = row.querySelector('td:nth-child(6) select option[selected]');
+    const qualidadeLiga = qualidadeLigaElement ? qualidadeLigaElement.value : null;
+
+    const extrasLigaElement = row.querySelector('td:nth-child(7) select');
+    let extrasLiga = [];
+
+    if (extrasLigaElement) {
+        for (let option of extrasLigaElement.options) {
+            if (option.selected) {
+                extrasLiga.push(option.value);
+            }
+        }
+    }
+
+    const estoqueLigaElement = row.querySelector('td:nth-child(1) input[type="text"]');
+    let estoqueLiga = estoqueLigaElement ? estoqueLigaElement.value : null;
+
+    if (estoqueLiga === null || estoqueLiga === '' || estoqueLiga === '0') {
+        estoqueLiga = 0;
+    }
+
+    if (!apiKey || !email) {
+        Swal.fire({
+            icon: "question",
+            title: "Ative a extensão!",
+            text: "Por favor, configure a extensão com a sua chave de API e ID de vendedor.",
+            footer: '<a href="#">Precisa de ajuda?</a>'
+        });
+        return null;
+    }
+
+    let finalCode = code;
+    if (idiomaLiga) {
+        finalCode += `&idiom=${idiomaLiga}`;
+    }
+    if (qualidadeLiga) {
+        finalCode += `&quality=${qualidadeLiga}`;
+    }
+    if (extrasLiga.length > 0) {
+        finalCode += `&extras=${extrasLiga}`;
+    }
+
+    return {
+        code: finalCode,
+        nomeProdutoLiga,
+        precoLiga,
+        estoqueLiga,
+        idiomaLiga,
+        qualidadeLiga,
+        extrasLiga,
+        cardId,
+        editionId,
+        cardNumber
+    };
+>>>>>>> Stashed changes
 }
 
 // Helper function to extract product data from row
@@ -1348,7 +1576,11 @@ async function modoFaltantes() {
         // Faz a requisição AJAX
         
         try {
+<<<<<<< Updated upstream
             let response = await fetch(`${API_BASE}catalog/collection/sellerstock/?limite=1&email=${email}&key=${apiKey}&card_id=${cardId}&edition_id=${cardEditionId}&idiom=${idiomaLiga}&quality=${qualidadeLiga}&extras=${extrasLiga}`);
+=======
+            let response = await fetch(`https://magusshop.com.br/catalog/collection/sellerstock/?limite=1&email=${email}&key=${apiKey}&card_id=${cardId}&edition_id=${cardEditionId}&idiom=${idiomaLiga}&quality=${qualidadeLiga}&extras=${extrasLiga}`);
+>>>>>>> Stashed changes
             let data = await response.json();
             console.log(data);
 
@@ -1368,7 +1600,11 @@ async function modoFaltantes() {
             }
             if (skuForUpdate === null) {
                 if (createOptionParam === 'true') {
+<<<<<<< Updated upstream
                     let createUrl = `${API_BASE}catalog/save/createsellerproduct/?sku=${code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+=======
+                    let createUrl = `https://magusshop.com.br/catalog/save/createsellerproduct/?sku=${code}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+>>>>>>> Stashed changes
                     response = await fetch(createUrl);
                     data = await response.json();
                     row.style.backgroundColor = 'lightgreen';
@@ -1398,7 +1634,11 @@ async function modoFaltantes() {
                 continue;
             }
 
+<<<<<<< Updated upstream
             const stockUrl = `${API_BASE}catalog/save/sellerproduct/?sku=${skuForUpdate}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+=======
+            const stockUrl = `https://magusshop.com.br/catalog/save/sellerproduct/?sku=${skuForUpdate}&email=${email}&key=${apiKey}&stock=${newStock}${newPrice}`;
+>>>>>>> Stashed changes
 
             response = await fetch(stockUrl);
             data = await response.json();
@@ -1430,6 +1670,7 @@ async function modoFaltantes() {
  */
 function onlyNumbers(str) {
     return str.replace(/\D/g, '');
+<<<<<<< Updated upstream
 }
 
 /**
@@ -1452,6 +1693,40 @@ function formatPrice(price) {
     } catch (error) {
         return 0.0;
     }
+=======
+}
+
+/**
+ * Formata preço
+ * @param {string|number} price
+ * @returns {number}
+ */
+function formatPrice(price) {
+    if (!price) {
+        return 0.0;
+    }
+
+    try {
+        if (price) {
+            price = onlyNumbers(price);
+            price = (Number(price) / 100).toFixed(2);
+            price = parseFloat(price);
+        }
+        return price;
+    } catch (error) {
+        return 0.0;
+    }
+}
+    
+if (modo === '1' || !modo) {
+    tcg = urlParams.get('tcg');
+    modoCadastro(tcg);
+}
+
+if (modo === '2') {
+    tcg = urlParams.get('tcg');
+    modoSincronizar(tcg);
+>>>>>>> Stashed changes
 }
     
 // if (modo === '1' || !modo) {
@@ -2275,7 +2550,11 @@ async function startSyncProcess() {
             if ('Notification' in window && Notification.permission === 'granted') {
                 new Notification('Magus Market - Sincronização de Pedidos', {
                     body: `${successOrders.length} pedidos sincronizados, ${errorOrders.length} erros`,
+<<<<<<< Updated upstream
                     icon: API_BASE + 'skin/frontend/default/magus/favicon.ico'
+=======
+                    icon: 'https://magusshop.com.br/skin/frontend/default/magus/favicon.ico'
+>>>>>>> Stashed changes
                 });
             } else if ('Notification' in window && Notification.permission !== 'denied') {
                 Notification.requestPermission();
@@ -2329,6 +2608,7 @@ function initSyncProcess() {
         startSyncProcess();
     }
 }
+<<<<<<< Updated upstream
 
 // Versão otimizada da extensão de sincronização
 const CACHE_DB_NAME = 'MagusProductCache';
@@ -3964,3 +4244,5 @@ async function handleSendCachedPrices(email, apiKey) {
 
 // Inicializar quando a página estiver carregada
 checkForSealedProductsPage();
+=======
+>>>>>>> Stashed changes
